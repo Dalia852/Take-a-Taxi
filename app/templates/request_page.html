@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taxi Request Page</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f0f2f5;
+    padding: 20px;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    font-weight: 600;
+  }
+
+  .request-form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .taxi-image {
+    width: 100px;
+    max-width: 100px;
+    height: 100px;
+    background: #e0e0e0;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 15px;
+  }
+
+  .btn-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    flex: 1;
+  }
+
+  .notification {
+    margin-top: 20px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  @media(max-width:576px){
+    .btn-group {
+      flex-direction: column;
+    }
+  }
+</style>
+</head>
+<body>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Request Ride</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+  <h3>Request Ride from {{driver.first_name}} {{driver.last_name}}</h3>
+
+  <form method="POST" action="{% url 'create_request' driver.id %}">
+    {% csrf_token %}
+    <input type="hidden" name="city" value="{{ selected_city }}">
+
+    <div class="mb-3">
+      <label>Pickup Location</label>
+      <input type="text" class="form-control" name="pickup" value="{{customer.default_pickup_address}}" required>
+    </div>
+    <div class="mb-3">
+      <label>Dropoff Location</label>
+      <input type="text" class="form-control" name="dropoff" required>
+    </div>
+    <div class="mb-3">
+      <label>Payment Method</label>
+      <select name="payment" class="form-select">
+        <option value="card">Card</option>
+        <option value="cash">Cash</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Request</button>
+    <a href="{% url 'customer_dashboard' customer.id %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Main Page</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f0f2f5;
+    padding-top: 70px; /* space for fixed navbar */
+  }
+
+  /* Navbar brand */
+  .navbar-brand {
+    font-weight: 700;
+  }
+
+  /* Taxi Card */
+  .taxi-card {
+    background: linear-gradient(90deg, #ffffff, #f9f9ff);
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+
+  .status-circle {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 10px;
+    border: 2px solid #fff;
+  }
+
+  .section-title {
+    font-weight: 700;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    color: #333;
+  }
+
+  .comments-link {
+    text-decoration: none;
+    color: #6C63FF;
+    font-weight: 500;
+  }
+
+  .comments-link:hover {
+    text-decoration: underline;
+  }
+
+  /* Clickable Taxi Cards */
+  .taxi-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .taxi-card-link:hover .taxi-card {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    cursor: pointer;
+  }
+
+  /* Selected Taxi */
+  .taxi-card.selected {
+    background: #6C63FF;
+    color: #fff;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+  }
+
+  /* Past Rides */
+  .past-ride-card {
+    background: #fff;
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .past-ride-card button {
+    background: #6C63FF;
+    color: #fff;
+    border: none;
+    padding: 7px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+
+  .past-ride-card button:hover {
+    background: #5750d4;
+  }
+
+  /* Request Status */
+  .request-status {
+    background: #fff;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+    margin-top: 25px;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #333;
+  }
+
+  .disabled-card {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none; /* prevents clicks */
+  }
+
+  /* Mobile responsiveness */
+  @media(max-width: 576px){
+    .taxi-card div:first-child,
+    .past-ride-card div:first-child {
+      min-width: 100%;
+      word-break: break-word;
+    }
+    .past-ride-card button {
+      width: 100%;
+      text-align: center;
+    }
+  }
+  .request-date {
+    color: purple;
+    font-weight: 600; /* optional, makes it stand out */
+}
+.card_adjust{
+  display: flex;
+  gap: 20px;
+}
+.adjust{
+  width: 250px;
+}
+
+</style>
+</head>
+<body>
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Welcome, {{user.first_name}} {{user.last_name}}</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'about_us' 'customer' user.id %}">About Us</a>
+        </li>
+      </ul>
+      <div class="d-flex">
+        <a href="{% url 'user_logout' %}" class="btn btn-outline-light">Logout</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <label for="citySelect" class="form-label fw-bold">Select City:</label>
+      <select id="citySelect" class="form-select">
+        <option value="">All Cities</option>
+        {% for city in cities %}
+          <option value="{{ city }}">{{ city }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+ 
+
+
+<div class="container mt-4">
+  <div class="section-title">Available Drivers</div>
+
+  {% for driver in drivers %}
+    {% if driver.status == "available" %}
+
+        <div class="taxi-card">
+          <div class="card_adjust">
+          <div class="adjust"><span class="status-circle bg-success"></span>{{ driver.first_name }} {{ driver.last_name }}</div>
+          <div class="ms-3">
+            <a href="{% url 'request_ride' driver.id %}?city={{ selected_city }}" class="btn btn-primary">
+              Request Ride
+            </a>
+          </div>
+        </div>
+          <div>
+  <!-- Display stars -->
+    {% for i in "12345" %}
+        {% if forloop.counter <= driver.avg_rating %}
+            <span style="color: gold; font-size: 1rem;">&#9733;</span>
+        {% else %}
+            <span style="color: #ccc; font-size: 1rem;">&#9733;</span>
+        {% endif %}
+    {% endfor %}
+    ({{ driver.avg_rating }}) | <a href="{% url 'driver_comments' driver.id %}">Comments</a>
+</div>
+
+
+        </div>
+      </a>
+    {% elif driver.status == "busy" %}
+      <div class="taxi-card disabled-card">
+        <div><span class="status-circle bg-danger"></span>{{ driver.first_name }} {{ driver.last_name }}</div>
+        <div>Currently Busy</div>
+      </div>
+    {% endif %}
+  {% empty %}
+    <p>No drivers available right now.</p>
+  {% endfor %}
+</div>
+
+
+
+
+
+
+
+<!-- Inside customer_dashboard.html -->
+{% for ride in ride_requests %}
+  <div class="past-ride-card" id="ride-{{ ride.id }}">
+    <div>
+      Ride with {{ ride.driver.first_name }} {{ ride.driver.last_name }} requested on 
+      <span class="request-date">{{ ride.created_at }}</span>
+      - Status: 
+      <span class="ride-status">
+        {% if ride.status == 'pending' %}
+          <span class="text-warning">Pending</span>
+        {% elif ride.status == 'accepted' %}
+          <span class="text-success">Accepted</span>
+        {% elif ride.status == 'rejected' %}
+          <span class="text-danger">Rejected</span>
+        {% endif %}
+      </span>
+    </div>
+    {% if ride.status == 'accepted' and not ride.review %}
+      <a href="{% url 'review_page' ride.id %}" class="btn btn-primary btn-sm rate-btn">Rate Driver</a>
+    {% endif %}
+  </div>
+{% endfor %}
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js">
+  
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  const citySelect = document.getElementById('citySelect');
+  citySelect.addEventListener('change', function() {
+    const selectedCity = this.value;
+    window.location.href = "{% url 'customer_dashboard' user.id %}" + (selectedCity ? `?city=${selectedCity}` : '');
+  });
+</script>
+
+<script>
+    const customerId = {{ user.id }};
+    const updateInterval = 5000; // 5 seconds (adjust if you want)
+
+    function updateRideStatuses() {
+    $.ajax({
+        url: "{% url 'ride_status_api' user.id %}",
+        type: "GET",
+        success: function(response) {
+            response.rides.forEach(ride => {
+                const rideCard = $('#ride-' + ride.ride_id);
+                if (rideCard.length) {
+                    // Update status
+                    let statusHtml = '';
+                    if (ride.status === 'pending') {
+                        statusHtml = '<span class="text-warning">Pending</span>';
+                    } else if (ride.status === 'accepted') {
+                        statusHtml = '<span class="text-success">Accepted</span>';
+                    } else if (ride.status === 'rejected') {
+                        statusHtml = '<span class="text-danger">Rejected</span>';
+                    }
+                    rideCard.find('.ride-status').html(statusHtml);
+
+                    // Add or remove Rate button dynamically
+                    let rateBtn = rideCard.find('.rate-btn');
+                    if (ride.can_rate) {
+                        if (!rateBtn.length) {
+                            rideCard.append(`<a href="/review/${ride.ride_id}/" class="btn btn-primary btn-sm rate-btn">Rate Driver</a>`);
+                        }
+                    } else {
+                        rateBtn.remove();
+                    }
+                }
+            });
+        },
+        error: function(err) {
+            console.error("Error fetching ride statuses", err);
+        }
+    });
+}
+
+// Poll every 5 seconds
+setInterval(updateRideStatuses, 5000);
+updateRideStatuses();
+
+</script>
+
+
+</body>
+</html>

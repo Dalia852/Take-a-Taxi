@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Driver Registration</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTavrtx-DRh-_6bIQ9OCYFqK0wiHtGaUsRO-0S1k-jxVE9MxXJ4dmZTGWPO3oDXd78XUnY&usqp=CAU') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .card {
+    backdrop-filter: blur(15px) brightness(1.1);
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    padding: 40px 30px;
+    max-width: 500px;
+    width: 100%;
+    color: #fff;
+  }
+
+  h1 {
+    margin-bottom: 25px;
+    font-weight: 700;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+    text-align: center;
+  }
+
+  .form-control {
+    border-radius: 12px;
+    margin-bottom: 15px;
+  }
+
+  .btn-register {
+    background: #6C63FF;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+
+  .btn-register:hover {
+    background: #574fd6;
+  }
+
+  @media (max-width: 576px) {
+    .card {
+      padding: 30px 20px;
+    }
+    h1 {
+      font-size: 1.8rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>Driver Registration</h1>
+
+  <form id="registerForm" method="POST" action="{% url 'register_driver' %}">
+    {% csrf_token %}
+    <div class="row g-2">
+      <div class="col-md-6">
+        <input type="text" name="first_name" class="form-control" placeholder="First Name" required>
+      </div>
+      <div class="col-md-6">
+        <input type="text" name="last_name" class="form-control" placeholder="Last Name" required>
+      </div>
+    </div>
+    <input type="text" name="id_number" class="form-control" placeholder="ID Number" required>
+    <input type="text" name="city" class="form-control" placeholder="City" required>
+    <input type="email" name="email" class="form-control" placeholder="Email" required>
+    <input type="tel" name="phone" class="form-control" placeholder="Phone Number" required>
+    <input type="text" name="license_number" class="form-control" placeholder="License Number" required>
+    <input type="text" name="car_model" class="form-control" placeholder="Car Model" required>
+    <input type="number" name="car_model_year" class="form-control" placeholder="Car Model Year" required>
+    <input type="password" name="password" class="form-control" placeholder="Password" required>
+    <button type="submit" class="btn btn-register w-100 mt-2">Register</button>
+  </form>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
